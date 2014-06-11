@@ -1,0 +1,15 @@
+<h1>{{model.name.first}} {{model.name.last}}</h1>
+
+{{#unless addButton}}
+  <p><a href="#profile/{{model.accountId}}">View</p>
+{{/unless}}
+
+<div class="actionarea">
+  {{#if addButton}}
+    <p><button class="addbutton">Add Friend</button></p>
+  {{/if}}
+
+  {{#if removeButton}}
+    <p><button class="removebutton">Remove Friend</button></p>
+  {{/if}}
+</div>

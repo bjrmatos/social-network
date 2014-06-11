@@ -1,0 +1,16 @@
+{
+  "name": "social-network",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone": "~1.1.2",
+    "jquery": "1.11.1",
+    "normalize.css": "~3.0.1"
+  }
+}

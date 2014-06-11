@@ -1,0 +1,48 @@
+{
+  "name": "social-network",
+  "private": true,
+  "version": "0.0.0",
+  "description": "A minimalistic social network using node.js, browserify, backbone and mongodb",
+  "main": "server.js",
+  "scripts": {
+    "preinstall": "npm install -g grunt-cli bower",
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/borismcr9/social-network.git"
+  },
+  "author": "BJR Matos",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/borismcr9/social-network/issues"
+  },
+  "dependencies": {
+    "express": "~4.4.1",
+    "jade": "~1.3.1",
+    "mongoose": "~3.8.12",
+    "morgan": "~1.1.1",
+    "serve-favicon": "~2.0.0",
+    "handlebars": "~1.3.0",
+    "hbsfy": "~1.3.2",
+    "body-parser": "~1.3.0",
+    "cookie-parser": "~1.1.0",
+    "express-session": "~1.2.1",
+    "nodemailer": "~0.6.5",
+    "nconf": "~0.6.9"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "matchdep": "~0.3.0",
+    "time-grunt": "~0.3.1",
+    "browserify": "~4.1.8",
+    "debowerify": "~0.7.1",
+    "grunt-wait": "~0.1.0",
+    "grunt-open": "~0.2.3",
+    "grunt-bowercopy": "~1.0.0",
+    "grunt-browserify": "~2.1.0",
+    "grunt-notify": "~0.3.0",
+    "load-grunt-configs": "~0.4.0"
+  }
+}
