@@ -1,12 +1,17 @@
 
-(function(){
+(function(window){
   'use strict';
 
   var $ = require('jquery'),
+      _ = require('underscore'),
       Backbone = require('backbone'),
       Router = require('./router');
 
   Backbone.$ = $;
+
+  var SocialNet = {};
+
+  _.extend(SocialNet, Backbone.Events);
 
   // check if the user is log-in
   var checkLogin = function checkLogin(callback) {
@@ -18,19 +23,20 @@
       return callback(true);
     })
     .fail(function() {
-      console.log('SOMETHING FAIL!!');
+      console.log('Your are not logged-in!!');
       return callback(false);
     });
   };
 
-  exports.currentView = null;
+  SocialNet.currentView = null;
 
-  exports.init = function() {
+  SocialNet.init = function() {
     var router = new Router({ app: this });
     this.router = router;
+    this.listenTo(Backbone, 'redirect', this.redirect);
   };
 
-  // exports.changeView = function(view) {
+  // SocialNet.changeView = function(view) {
   //   if (null != this.currentView) {
   //     // Remove all callbacks for all events asociate in this object
   //     // (Delete Objects listen [observers] -> View events)
@@ -45,7 +51,7 @@
   //   this.currentView.render();
   // };
 
-  exports.changeView = function(view) {
+  SocialNet.changeView = function(view) {
     if (null != this.currentView) {
       // Remove subviews
       if (this.currentView.removeSubViews) {
@@ -65,8 +71,26 @@
     this.currentView.render();
   };
 
-  exports.run = function() {
-    checkLogin(function(authenticated) {
+  SocialNet.redirect = function(opt) {
+    var options = {
+      url: null,
+      refresh: false,
+      trigger: false
+    };
+
+    _.extend(options, opt);
+
+    if (options.url == null) { return; }
+
+    if (options.refresh) {
+      return window.location.href = options.url;
+    }
+
+    this.router.navigate(options.url, { trigger: options.trigger });
+  };
+
+  SocialNet.run = function() {
+    checkLogin(_.bind(function(authenticated) {
       // start the history and hash based events
       // and check for the proper init page
       Backbone.history.start();
@@ -75,9 +99,11 @@
       if (!authenticated) {
         this.router.navigate('login', {trigger: true});
       } else {
-        // TODO: Implement logic to take the path to redirect from the url
-        this.router.navigate('index', {trigger: true});
+        // Take the current path (fragment) and navigate to it
+        this.router.navigate(Backbone.history.fragment || 'index', {trigger: true});
       }
-    });
+    }, this));
   };
-})();
+
+  module.exports = SocialNet;
+})(global);

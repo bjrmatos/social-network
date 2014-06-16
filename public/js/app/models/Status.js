@@ -5,7 +5,9 @@
   var Backbone = require('backbone');
 
   var Status = Backbone.Model.extend({
-    urlRoot: '/accounts/' + this.accountId + '/status'
+    urlRoot: function() {
+      return '/accounts/' + this.accountId + '/status';
+    }
   });
 
   module.exports = Status;

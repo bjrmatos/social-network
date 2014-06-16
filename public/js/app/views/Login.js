@@ -22,13 +22,19 @@
         data: {
           email: this.$('input[name=email]').val(),
           password: this.$('input[name=password]').val()
-        }
+        },
+        context: this
       })
       .done(function(data) {
-        console.log('Login: ', data);
+        console.log('Redirecting...');
+
+        Backbone.trigger('redirect', {
+          url: '/',
+          refresh: true
+        });
       })
       .fail(function() {
-        this.$('#error').text('Unable to login.');
+        this.$('#error').text('Email or password incorrect.');
         this.$('#error').slideDown();
       });
     },

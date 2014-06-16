@@ -28,3 +28,6 @@ node_modules
 # bower
 bower_components
 test/bower_components
+
+# config folder
+config/mail.json

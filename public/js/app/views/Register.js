@@ -15,6 +15,8 @@
       'submit form': 'register'
     },
     register: function(event) {
+      event.preventDefault();
+
       $.ajax('/register', {
         type: 'POST',
         data: {
@@ -30,8 +32,6 @@
       .fail(function() {
         console.log('Register FAIL!');
       });
-
-      event.preventDefault();
     },
     render: function() {
       this.$el.html(this.template());

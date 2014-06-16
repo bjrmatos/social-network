@@ -6,11 +6,14 @@
       Backbone = require('backbone'),
       Account = require('./models/Account'),
       StatusCollection = require('./collections/Status'),
+      ContactCollection = require('./collections/Contact'),
       IndexView = require('./views/Index'),
       RegisterView = require('./views/Register'),
       LoginView = require('./views/Login'),
       ForgotPasswordView = require('./views/ForgotPassword'),
-      ProfileView = require('./views/Profile');
+      ProfileView = require('./views/Profile'),
+      ContactsView = require('./views/Contacts'),
+      AddContactView = require('./views/AddContact');
 
   Backbone.$ = $;
 
@@ -18,10 +21,12 @@
   var Router = Backbone.Router.extend({
     routes: {
       'index': 'index',
+      'addcontact': 'addcontact',
       'login': 'login',
       'register': 'register',
       'forgotpassword': 'forgotpassword',
-      'profile:id': 'profile'
+      'profile/:id': 'profile',
+      'contacts/:id': 'contacts'
     },
     initialize: function(options) {
       this.app = options.app;
@@ -36,6 +41,9 @@
       }));
 
       statusCollection.fetch();
+    },
+    addcontact: function() {
+      this.app.changeView(new AddContactView());
     },
     login: function() {
       this.app.changeView(new LoginView());
@@ -54,6 +62,18 @@
       }));
 
       account.fetch();
+    },
+    contacts: function(id) {
+      var contactId = id ? id : 'me',
+          contactCollection = new ContactCollection();
+
+      contactCollection.url = '/account/' + contactId + '/contacts';
+
+      this.app.changeView(new ContactsView({
+        collection: contactCollection
+      }));
+
+      contactCollection.fetch();
     }
   });
 

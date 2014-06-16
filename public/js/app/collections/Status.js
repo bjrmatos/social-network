@@ -2,7 +2,7 @@
 (function(){
   'use strict';
 
-  var Backbone = require('backbobe'),
+  var Backbone = require('backbone'),
       Status = require('../models/Status');
 
   var StatusCollection = Backbone.Collection.extend({
