@@ -67,7 +67,7 @@
       var contactId = id ? id : 'me',
           contactCollection = new ContactCollection();
 
-      contactCollection.url = '/account/' + contactId + '/contacts';
+      contactCollection.url = '/accounts/' + contactId + '/contacts';
 
       this.app.changeView(new ContactsView({
         collection: contactCollection

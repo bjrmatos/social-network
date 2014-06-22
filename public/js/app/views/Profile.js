@@ -34,7 +34,7 @@
 
         //   $(statusHtml).prependTo('.status_list').hide().fadeIn('slow');
         // });
-        statusCollection.each(function(statusModel) {
+        statusCollection.forEach(function(statusModel) {
           self.prependStatus(statusModel);
         });
       }
@@ -51,7 +51,7 @@
       event.preventDefault();
 
       var self = this,
-          statusText = this.$('input[name=status').val();
+          statusText = this.$('input[name=status]').val();
 
       $.ajax('/accounts/' + this.model.get('_id') + '/status', {
         type: 'POST',

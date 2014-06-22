@@ -90,7 +90,7 @@ app.get('/accounts/:id/contacts', function(req, res) {
                   req.params.id;
 
   Account.findById(accountId, function(err, account) {
-    res.send(account.contacts);
+    res.send(account ? account.contacts : {});
   });
 });
 
@@ -192,7 +192,7 @@ app.get('/accounts/:id', function(req, res) {
   var accountId = req.params.id === 'me' ?
                   req.session.accountId :
                   req.params.id;
-
+  console.log('ACCOUNTS REQUEST: ME');
   Account.findById(accountId, function(err, account) {
     /**
 

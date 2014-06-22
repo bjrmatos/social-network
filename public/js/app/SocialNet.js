@@ -91,8 +91,25 @@
 
   SocialNet.run = function() {
     checkLogin(_.bind(function(authenticated) {
-      // start the history and hash based events
-      // and check for the proper init page
+      /**
+      *
+      * start the history and hash based events
+      * and check for the proper init page.
+      *
+      * <!-- Passing silent: true, for don't launch
+      * the initial route, because first we check for
+      * the user is logged-in and redirect based on it. -->
+      *
+      **/
+
+      /**
+
+        TODO:
+        - Check if exists a better pattern for manage authentication
+          in backbone apps
+
+      **/
+
       Backbone.history.start();
 
       // if is not logged-in refirect to login

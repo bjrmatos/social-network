@@ -15,9 +15,6 @@
     events: {
       'submit form': 'search'
     },
-    initialize: function() {
-      this.$results = this.$('#results');
-    },
     search: function(event) {
       event.preventDefault();
 
@@ -42,6 +39,7 @@
     // },
     render: function(resultList) {
       this.$el.html(this.template());
+      this.$results = this.$('#results'); // cache jquery object
       this.removeSubViews();
 
       if (null != resultList) {
