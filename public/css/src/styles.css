@@ -5,13 +5,13 @@
  */
 
 ::-moz-selection {
-    background: #b3d4fc;
-    text-shadow: none;
+  background: #b3d4fc;
+  text-shadow: none;
 }
 
 ::selection {
-    background: #b3d4fc;
-    text-shadow: none;
+  background: #b3d4fc;
+  text-shadow: none;
 }
 
 /*
@@ -19,12 +19,8 @@
  * their containers: h5bp.com/i/440
  */
 
-audio,
-canvas,
-img,
-svg,
-video {
-    vertical-align: middle;
+audio, canvas, img, svg, video {
+  vertical-align: middle;
 }
 
 /*
@@ -32,7 +28,7 @@ video {
  */
 
 textarea {
-    resize: vertical;
+  resize: vertical;
 }
 
 /* ==========================================================================
@@ -40,8 +36,78 @@ textarea {
    ========================================================================== */
 
 .browsehappy {
-    margin: 0.2em 0;
-    background: #ccc;
-    color: #000;
-    padding: 0.2em 0;
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+/**
+*
+* Custom styles
+*
+**/
+
+form {
+  width: 400px;
+}
+
+#chat {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+#chat form {
+  width: auto;
+}
+
+.chat_list {
+  float: right;
+  border: 1px solid black;
+  border-bottom: none;
+  list-style-type: none;
+  overflow: auto;
+  width: 120px;
+  height: 300px;
+  margin: 0;
+  padding: 0 0 5px 0;
+  box-sizing: border-box;
+}
+
+.chat_list li {
+  width: 100%;
+  padding: 10px 0;
+  background-color: #0099ff;
+}
+
+.chat_list li:nth-child(odd) {
+  background-color: #80ccff;
+}
+
+.chat_list span {
+  margin: 10px;
+}
+
+.chat_session {
+  float: left;
+  width: 250px;
+  height: 300px;
+  padding: 5px;
+  border: 1px solid #000;
+  border-right: none;
+  border-bottom: none;
+  box-sizing: border-box;
+}
+
+.online_indicator {
+  float: left;
+  width: 15px;
+  height: 16px;
+  margin-left: 4px;
+  margin-right: 4px;
+  background-image: url('/images/trafficlight.png');
+}
+.online_indicator.online {
+  background-position: -15px 0;
 }

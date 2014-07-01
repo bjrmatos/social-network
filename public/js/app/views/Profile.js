@@ -4,6 +4,7 @@
 
   var $ = require('jquery'),
       Backbone = require('backbone'),
+      socketEventDispatcher = require('../socketEvents'),
       Status = require('../models/Status'),
       SocialNetView = require('./SocialNet'),
       StatusView = require('./Status'),
@@ -20,24 +21,13 @@
     initialize: function() {
       this.listenTo(this.model, 'change', this.render);
     },
-    render: function() {
-      var self = this;
+    onSocketStatusAdded: function(data) {
+      var newStatus = data.data;
 
-      this.$el.html(this.template(this.model.toJSON()));
-
-      var statusCollection = this.model.get('status');
-
-      if (null != statusCollection) {
-        // _.each(statusCollection, function(statusJson) {
-        //   var statusModel = new Status(statusJson),
-        //       statusHtml = (new StatusView({ model: statusModel })).render().el);
-
-        //   $(statusHtml).prependTo('.status_list').hide().fadeIn('slow');
-        // });
-        statusCollection.forEach(function(statusModel) {
-          self.prependStatus(statusModel);
-        });
-      }
+      this.prependStatus(new Status({
+        status: newStatus.status,
+        name: newStatus.name
+      }));
     },
     prependStatus: function(statusModel) {
       var statusHtml = (new StatusView({ model: statusModel })).render().el;
@@ -60,8 +50,47 @@
         }
       })
       .done(function(data) {
-        self.prependStatus(new Status({ status: statusText }));
+        // No longer adding to screen, because is handled by socket.io event
+        // self.prependStatus(new Status({ status: statusText }));
       });
+    },
+    render: function() {
+      var self = this;
+
+      if (this.model.get('_id')) {
+        this.listenTo(
+          socketEventDispatcher,
+          'status:' + this.model.get('_id'),
+          this.onSocketStatusAdded
+        );
+
+        this.prevModelId = this.model.get('_id');
+      } else {
+        if (this.prevModelId) {
+          this.stopListening(
+            socketEventDispatcher,
+            'status:' + this.prevModelId
+          );
+
+          this.prevModelId = null;
+        }
+      }
+
+      this.$el.html(this.template(this.model.toJSON()));
+
+      var statusCollection = this.model.get('status');
+
+      if (null != statusCollection) {
+        // _.each(statusCollection, function(statusJson) {
+        //   var statusModel = new Status(statusJson),
+        //       statusHtml = (new StatusView({ model: statusModel })).render().el);
+
+        //   $(statusHtml).prependTo('.status_list').hide().fadeIn('slow');
+        // });
+        statusCollection.forEach(function(statusModel) {
+          self.prependStatus(statusModel);
+        });
+      }
     }
   });
 

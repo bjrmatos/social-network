@@ -2,7 +2,16 @@
 
 var crypto = require('crypto');
 
-module.exports = function(config, mongoose, nodemailer) {
+module.exports = function(app, mailConfig, mongoose, nodemailer) {
+  var schemaOptions = {
+    toJSON: {
+      virtuals: true
+    },
+    toObject: {
+      virtuals: true
+    }
+  };
+
   var StatusSchema = new mongoose.Schema({
     name: {
       first: { type: String },
@@ -19,6 +28,11 @@ module.exports = function(config, mongoose, nodemailer) {
     accountId: { type: mongoose.Schema.ObjectId },
     added: { type: Date },
     updated: { type: Date }
+  }, schemaOptions);
+
+  ContactSchema.virtual('online').get(function() {
+    // for serialize a ObjectID type call toString()
+    return app.isAccountOnline(this.get('accountId').toString());
   });
 
   var AccountSchema = new mongoose.Schema({
@@ -76,7 +90,7 @@ module.exports = function(config, mongoose, nodemailer) {
     this.findOne({ email:email }, function(err, doc) {
       if (err) { return callback(false); }
 
-      var smtpTransport = nodemailer.createTransport('SMTP', config.mail);
+      var smtpTransport = nodemailer.createTransport('SMTP', mailConfig.mail);
 
       resetPasswordUrl += '?:account=' + doc._id;
 
@@ -128,7 +142,7 @@ module.exports = function(config, mongoose, nodemailer) {
 
   AccountSchema.statics.addContact = function(account, addcontact) {
     var contact = {
-      name: addcontact.name,
+      name: addcontact.get('name'),
       accountId: addcontact._id,
       added: new Date(),
       updated: new Date()
@@ -137,7 +151,7 @@ module.exports = function(config, mongoose, nodemailer) {
     account.contacts.push(contact);
 
     account.save(function(err) {
-      if (err) { console.log('Error saving account: ', err); }
+      if (err) { return console.log('Error saving account: ', err); }
     });
   };
 

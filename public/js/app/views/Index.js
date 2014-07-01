@@ -4,7 +4,7 @@
 
   var $ = require('jquery'),
     Backbone = require('backbone'),
-    // TODO: SOLVE THE RELATIVE PATH HELL... "../../../"
+    socketEventDispatcher = require('../socketEvents'),
     Status = require('../models/Status'),
     SocialNetView = require('./SocialNet'),
     StatusView = require('./Status'),
@@ -19,6 +19,7 @@
       'submit form': 'updateStatus'
     },
     initialize: function() {
+      this.listenTo(socketEventDispatcher, 'status:me', this.onSocketStatusAdded);
       this.listenTo(this.collection, 'add', this.onStatusAdded);
       this.listenTo(this.collection, 'reset', this.onStatusCollectionReset);
     },
@@ -28,6 +29,26 @@
       collection.each(function(model) {
         self.onStatusAdded(model);
       });
+    },
+    onSocketStatusAdded: function(data) {
+      var newStatus = data.data,
+          found = false;
+
+      this.collection.forEach(function(status) {
+        var name = status.get('name');
+
+        if (name && name.full === newStatus.name.full &&
+          status.get('status') === newStatus.status) {
+          found = true;
+        }
+      });
+
+      if (!found) {
+        this.collection.add(new Status({
+          status: newStatus.status,
+          name: newStatus.name
+        }));
+      }
     },
     onStatusAdded: function(status) {
       var statusHtml = (new StatusView({ model: status })).render().el;
@@ -46,8 +67,11 @@
         }
       })
       .done(function(data) {
-        statusCollection.add(new Status({ status: statusText }));
+        // No longer adding to screen, because is handled by socket.io event
+        // statusCollection.add(new Status({ status: statusText }));
       });
+
+      this.$('input[name=status]').val('');
     },
     render: function() {
       this.$el.html(this.template());

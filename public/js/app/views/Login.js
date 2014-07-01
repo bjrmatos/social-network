@@ -4,11 +4,14 @@
 
   var $ = require('jquery'),
       Backbone = require('backbone'),
+      socketEventDispatcher = require('../socketEvents'),
+      SocialNetView = require('./SocialNet'),
       template = require('../templates/login.hbs');
 
   Backbone.$ = $;
 
-  var LoginView = Backbone.View.extend({
+  var LoginView = SocialNetView.extend({
+    requireLogin: false,
     el: $('#content'),
     template: template,
     events: {
@@ -27,10 +30,11 @@
       })
       .done(function(data) {
         console.log('Redirecting...');
+        socketEventDispatcher.trigger('app:loggedin', data);
 
         Backbone.trigger('redirect', {
-          url: '/',
-          refresh: true
+          url: 'index',
+          trigger: true
         });
       })
       .fail(function() {
@@ -41,6 +45,7 @@
     render: function() {
       this.$el.html(this.template());
       this.$('#error').hide();
+      this.$('input[name=email]').focus();
     }
   });
 

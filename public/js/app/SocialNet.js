@@ -5,6 +5,8 @@
   var $ = require('jquery'),
       _ = require('underscore'),
       Backbone = require('backbone'),
+      socketEventDispatcher = require('./socketEvents'),
+      socialNetSockets = require('./socialNetSockets'),
       Router = require('./router');
 
   Backbone.$ = $;
@@ -18,8 +20,9 @@
     $.ajax('/account/authenticated', {
       type: 'GET'
     })
-    .done(function() {
-      console.log('ALL OK!!');
+    .done(function(accountId) {
+      console.log('USER AUTHENTICATED!!');
+      socketEventDispatcher.trigger('app:loggedin', accountId);
       return callback(true);
     })
     .fail(function() {
@@ -33,6 +36,7 @@
   SocialNet.init = function() {
     var router = new Router({ app: this });
     this.router = router;
+    socialNetSockets.initialize();
     this.listenTo(Backbone, 'redirect', this.redirect);
   };
 
